@@ -1,5 +1,8 @@
 package irk.staryo.androidmess.ui.element
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MultiChoiceSegmentedButtonRow
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -24,6 +27,49 @@ fun SingleChoiceSegmentedButton(modifier: Modifier = Modifier) {
                 onClick = { selectedIndex = index },
                 selected = index == selectedIndex,
                 label = { Text(label) }
+            )
+        }
+    }
+}
+
+@Composable
+fun MultiChoiceSegmentedButton(modifier: Modifier = Modifier) {
+    val selectedOptions = remember {
+        mutableStateListOf(false, false, false)
+    }
+    val options = listOf("Walk", "Ride", "Drive")
+
+    MultiChoiceSegmentedButtonRow {
+        options.forEachIndexed { index, label ->
+            SegmentedButton(
+                shape = SegmentedButtonDefaults.itemShape(
+                    index = index,
+                    count = options.size
+                ),
+                checked = selectedOptions[index],
+                onCheckedChange = {
+                    selectedOptions[index] = !selectedOptions[index]
+                },
+                icon = { SegmentedButtonDefaults.Icon(selectedOptions[index]) },
+                label = {
+                    when (label) {
+                        "Walk" -> Icon(
+                            imageVector =
+                                Icons.AutoMirrored.Filled.DirectionsWalk,
+                            contentDescription = "Directions Walk"
+                        )
+                        "Ride" -> Icon(
+                            imageVector =
+                                Icons.Default.DirectionsBus,
+                            contentDescription = "Directions Bus"
+                        )
+                        "Drive" -> Icon(
+                            imageVector =
+                                Icons.Default.DirectionsCar,
+                            contentDescription = "Directions Car"
+                        )
+                    }
+                }
             )
         }
     }
