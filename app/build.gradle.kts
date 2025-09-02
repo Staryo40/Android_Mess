@@ -6,12 +6,13 @@ plugins {
 
 android {
     namespace = "irk.staryo.androidmess"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "irk.staryo.androidmess"
         minSdk = 26
-        targetSdk = 35
+        //noinspection EditedTargetSdkVersion
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
