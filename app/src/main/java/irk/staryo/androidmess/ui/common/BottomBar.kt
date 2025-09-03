@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import irk.staryo.androidmess.model.SegmentedOption
 
 @Composable
-fun BottomBar(options : List<SegmentedOption>){
-    var selected by remember { mutableIntStateOf(0) }
+fun BottomBar(current : Int, options : List<SegmentedOption>){
+    var selected by rememberSaveable { mutableIntStateOf(0) }
 
     Row(modifier = Modifier
         .fillMaxWidth()
