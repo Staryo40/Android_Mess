@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() { // Compose version of activity
                 var selected by rememberSaveable { mutableIntStateOf(0) }
                 val bottomOptions = listOf(
                     SegmentedOption("Home", { selected = 0 }),
-                    SegmentedOption("Option2", { selected = 1 }),
+                    SegmentedOption("Materi", { selected = 1 }),
                     SegmentedOption("Option3", { selected = 2 })
                 )
 

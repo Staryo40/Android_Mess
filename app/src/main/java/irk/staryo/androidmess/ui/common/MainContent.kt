@@ -18,7 +18,6 @@ fun MainContent(modifier: Modifier = Modifier, child: @Composable () -> Unit){
 
     Column(
         modifier = modifier
-            .verticalScroll(rememberScrollState())
     ) {
         currentChild()
 //        child()
