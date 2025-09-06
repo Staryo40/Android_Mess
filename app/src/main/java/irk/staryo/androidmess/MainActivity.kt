@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -21,10 +22,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import irk.staryo.androidmess.model.SegmentedOption
 import irk.staryo.androidmess.ui.common.BottomBar
 import irk.staryo.androidmess.ui.common.MainContent
 import irk.staryo.androidmess.ui.common.TopBar
+import androidx.lifecycle.viewmodel.compose.viewModel
+import irk.staryo.androidmess.ui.practice.TwoOptionList
 import irk.staryo.androidmess.ui.theme.AndroidMessTheme
 
 class MainActivity : ComponentActivity() { // Compose version of activity
@@ -33,6 +37,8 @@ class MainActivity : ComponentActivity() { // Compose version of activity
         enableEdgeToEdge()
         setContent { // Equivalent to setContentView(R.layout.activity_main)
             AndroidMessTheme {
+                val mainViewModel: MainViewModel = viewModel()
+
                 var selected by rememberSaveable { mutableIntStateOf(0) }
                 val bottomOptions = listOf(
                     SegmentedOption("Home", { selected = 0 }),
@@ -52,7 +58,13 @@ class MainActivity : ComponentActivity() { // Compose version of activity
                         MainContent(modifier = Modifier.weight(1f)) {
                             when (selected) {
                                 0 -> Greeting("Home")
-                                1 -> Greeting("Option2")
+                                1 -> TwoOptionList(
+                                    option1 = mainViewModel.option1,
+                                    option2 = mainViewModel.option2,
+                                    rowModifier = Modifier
+                                        .padding(16.dp)
+                                        .fillMaxWidth()
+                                )
                                 2 -> Greeting("Option3")
                             }
                         }

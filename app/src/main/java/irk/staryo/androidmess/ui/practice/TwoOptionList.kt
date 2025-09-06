@@ -1,7 +1,9 @@
 package irk.staryo.androidmess.ui.practice
 
+import android.R.attr.label
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -38,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import irk.staryo.androidmess.model.MataKuliahItem
 import irk.staryo.androidmess.model.SegmentedComposeOption
@@ -59,14 +62,16 @@ fun TwoOptionList(
                 shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
                 onClick = { selectedIndex = 0 },
                 selected = selectedIndex == 0,
-                label = { option1.label }
+                icon = {},
+                label = option1.label
             )
             SegmentedButton(
                 modifier = if (selectedIndex == 1) selectedModifier else defaultModifier,
                 shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
                 onClick = { selectedIndex = 1 },
                 selected = selectedIndex == 1,
-                label = { option1.label }
+                icon = {},
+                label = option2.label
             )
         }
 
@@ -79,11 +84,14 @@ fun TwoOptionList(
 }
 
 @Composable
-fun MataKuliahLayout(materialList : List<MataKuliahItem>){
+fun MataKuliahLayout(reference: String, materialList : List<MataKuliahItem>){
     Column (modifier = Modifier.fillMaxHeight()){
         var searchQuery by remember { mutableStateOf("") }
 
-        Text("Reference: xxx.com")
+        Text(
+            text = "Reference: $reference",
+            modifier = Modifier.padding(16.dp)
+        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -114,36 +122,44 @@ fun MataKuliahLayout(materialList : List<MataKuliahItem>){
         }
         LazyColumn (
             Modifier
-                .verticalScroll(rememberScrollState())
                 .weight(1f)
                 .padding(16.dp)
         ) {
             itemsIndexed(materialList) { index, material ->
                 Row(modifier = Modifier
                     .fillMaxWidth()
+                    .padding(bottom = 16.dp)
                     .clickable { material.selectFun() }
+                    .border(1.dp, Color.Black, shape = RoundedCornerShape(4.dp))
+                    .background(Color.White, shape = RoundedCornerShape(4.dp))
                     .padding(16.dp)
                 ) {
-                    Column (modifier = Modifier.weight(1f)){
-                        Row(Modifier.fillMaxWidth()) {
-                            Text(
-                                text = "Subject:",
-                                modifier = Modifier
-                                    .width(IntrinsicSize.Max)
-                                    .padding(end = 8.dp),
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(text = material.subject)
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .width(IntrinsicSize.Max)
+                                .padding(end = 8.dp)
+                        ) {
+                            Text("Subject:", fontWeight = FontWeight.Bold)
+                            Text("Material:", fontWeight = FontWeight.Bold)
                         }
-                        Row(Modifier.fillMaxWidth()) {
+
+                        Column(
+                            modifier = Modifier.weight(1f) // <-- take remaining space
+                        ) {
                             Text(
-                                text = "Material:",
-                                modifier = Modifier
-                                    .width(IntrinsicSize.Max)
-                                    .padding(end = 8.dp),
-                                fontWeight = FontWeight.Bold
+                                text = material.subject,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
                             )
-                            Text(text = material.materialTitle)
+                            Text(
+                                text = material.materialTitle,
+                                maxLines = Int.MAX_VALUE,
+                                overflow = TextOverflow.Visible
+                            )
                         }
                     }
                     IconButton(
