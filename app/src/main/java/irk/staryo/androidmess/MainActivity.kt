@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() { // Compose version of activity
                                     option1 = mainViewModel.option1,
                                     option2 = mainViewModel.option2,
                                     rowModifier = Modifier
-                                        .padding(16.dp)
+                                        .padding(12.dp)
                                         .fillMaxWidth()
                                 )
                                 2 -> Greeting("Option3")

@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import irk.staryo.androidmess.model.MataKuliahItem
 import irk.staryo.androidmess.model.SegmentedComposeOption
 
@@ -85,17 +86,20 @@ fun TwoOptionList(
 
 @Composable
 fun MataKuliahLayout(reference: String, materialList : List<MataKuliahItem>){
-    Column (modifier = Modifier.fillMaxHeight()){
+    Column (modifier = Modifier.fillMaxHeight().padding(horizontal = 12.dp)){
         var searchQuery by remember { mutableStateOf("") }
 
         Text(
             text = "Reference: $reference",
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(bottom = 12.dp),
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
         )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(bottom = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             TextField(
@@ -123,12 +127,11 @@ fun MataKuliahLayout(reference: String, materialList : List<MataKuliahItem>){
         LazyColumn (
             Modifier
                 .weight(1f)
-                .padding(16.dp)
         ) {
             itemsIndexed(materialList) { index, material ->
                 Row(modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 12.dp)
                     .clickable { material.selectFun() }
                     .border(1.dp, Color.Black, shape = RoundedCornerShape(4.dp))
                     .background(Color.White, shape = RoundedCornerShape(4.dp))
