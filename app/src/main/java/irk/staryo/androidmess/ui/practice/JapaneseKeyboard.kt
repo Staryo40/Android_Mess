@@ -4,6 +4,8 @@ import android.R.attr.direction
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -15,11 +17,26 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.filled.Backspace
+import androidx.compose.material.icons.filled.SpaceBar
+import androidx.compose.material.icons.filled.KeyboardReturn
+import androidx.compose.material.icons.filled.ArrowRight
+import androidx.compose.material.icons.filled.ArrowLeft
+import androidx.compose.material.icons.filled.TurnLeft
+import androidx.compose.material.icons.filled.SentimentVerySatisfied
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -28,10 +45,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import irk.staryo.androidmess.enums.Direction
 import irk.staryo.androidmess.model.JapaneseButtonContainer
+import irk.staryo.androidmess.R
 
 @Composable
 fun JapaneseInputLayout(){
@@ -58,8 +80,6 @@ fun CharacterInputBox(
     characters: String,
     containerModifier: Modifier = Modifier
 ) {
-    var currentCharacters by remember { mutableStateOf<String>(characters) }
-
     Column (modifier = containerModifier){
         Box(
             modifier = Modifier
@@ -69,7 +89,7 @@ fun CharacterInputBox(
                 .fillMaxHeight()
         ) {
             Text(
-                text = currentCharacters,
+                text = characters,
                 maxLines = Int.MAX_VALUE,
                 overflow = TextOverflow.Visible
             )
@@ -81,27 +101,64 @@ fun CharacterInputBox(
 fun JapaneseKeyboard(addCharacter : (String) -> Unit, deleteCharacter: () -> Unit){
     var chiisaiChar by rememberSaveable { mutableStateOf(false) }
     var chiisaiCharChanger : (String) -> Unit = {text -> chiisaiChar = !chiisaiChar}
+    val kanaIcon: Painter = painterResource(id = R.drawable.language_japanese_kana)
 
     Row(
         modifier = Modifier.fillMaxWidth()
     ){
         Column(modifier = Modifier.weight(1f).padding(horizontal = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Box(modifier = Modifier
-                .background(Color.Gray, RoundedCornerShape(8.dp))
+                .background(Color.LightGray, RoundedCornerShape(8.dp))
                 .size(width = 120.dp, height = 60.dp)
-            )
+                .clickable {  },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.TurnLeft,
+                    contentDescription = "Turn Left",
+                    tint = Color.Black,
+                    modifier = Modifier.size(32.dp)
+                )
+            }
             Box(modifier = Modifier
-                .background(Color.Gray, RoundedCornerShape(8.dp))
+                .background(Color.LightGray, RoundedCornerShape(8.dp))
                 .size(width = 120.dp, height = 60.dp)
-            )
+                .clickable {  },
+                contentAlignment = Alignment.Center
+            ){
+                Icon(
+                    imageVector = Icons.Filled.ArrowLeft,
+                    contentDescription = "Arrow Left",
+                    tint = Color.Black,
+                    modifier = Modifier.size(48.dp)
+                )
+            }
             Box(modifier = Modifier
-                .background(Color.Gray, RoundedCornerShape(8.dp))
+                .background(Color.LightGray, RoundedCornerShape(8.dp))
                 .size(width = 120.dp, height = 60.dp)
-            )
+                .clickable {  },
+                contentAlignment = Alignment.Center
+            ){
+                Icon(
+                    imageVector = Icons.Filled.SentimentVerySatisfied,
+                    contentDescription = "Arrow Left",
+                    tint = Color.Black,
+                    modifier = Modifier.size(32.dp)
+                )
+            }
             Box(modifier = Modifier
-                .background(Color.Gray, RoundedCornerShape(8.dp))
+                .background(Color.LightGray, RoundedCornerShape(8.dp))
                 .size(width = 120.dp, height = 60.dp)
-            )
+                .clickable {  },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = kanaIcon,
+                    contentDescription = "Convert language",
+                    tint = Color.Black,
+                    modifier = Modifier.size(32.dp)
+                )
+            }
         }
         Column (
             modifier = Modifier.weight(1f).padding(horizontal = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -189,22 +246,59 @@ fun JapaneseKeyboard(addCharacter : (String) -> Unit, deleteCharacter: () -> Uni
             )
         }
         Column(modifier = Modifier.weight(1f).padding(horizontal = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Box(
+                modifier = Modifier
+                    .background(Color.LightGray, RoundedCornerShape(8.dp))
+                    .size(width = 120.dp, height = 60.dp)
+                    .clickable { deleteCharacter() },  // call your function on click
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Backspace, // Material delete/backspace icon
+                    contentDescription = "Delete character",
+                    tint = Color.Black,
+                    modifier = Modifier.size(32.dp)
+                )
+            }
             Box(modifier = Modifier
-                .background(Color.Gray, RoundedCornerShape(8.dp))
+                .background(Color.LightGray, RoundedCornerShape(8.dp))
                 .size(width = 120.dp, height = 60.dp)
-            )
+                .clickable {  },
+                contentAlignment = Alignment.Center
+            ){
+                Icon(
+                    imageVector = Icons.Filled.ArrowRight,
+                    contentDescription = "Arrow Right",
+                    tint = Color.Black,
+                    modifier = Modifier.size(48.dp)
+                )
+            }
             Box(modifier = Modifier
-                .background(Color.Gray, RoundedCornerShape(8.dp))
+                .background(Color.LightGray, RoundedCornerShape(8.dp))
                 .size(width = 120.dp, height = 60.dp)
-            )
+                .clickable { addCharacter("　") },
+                contentAlignment = Alignment.Center
+            ){
+                Icon(
+                    imageVector = Icons.Filled.SpaceBar,
+                    contentDescription = "Space",
+                    tint = Color.Black,
+                    modifier = Modifier.size(32.dp)
+                )
+            }
             Box(modifier = Modifier
-                .background(Color.Gray, RoundedCornerShape(8.dp))
+                .background(Color.LightGray, RoundedCornerShape(8.dp))
                 .size(width = 120.dp, height = 60.dp)
-            )
-            Box(modifier = Modifier
-                .background(Color.Gray, RoundedCornerShape(8.dp))
-                .size(width = 120.dp, height = 60.dp)
-            )
+                .clickable { addCharacter("　") },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.KeyboardReturn,
+                    contentDescription = "Enter",
+                    tint = Color.Black,
+                    modifier = Modifier.size(32.dp)
+                )
+            }
         }
     }
 }
@@ -219,12 +313,14 @@ fun JapaneseCharacterButton(
     Box(
         modifier = Modifier
             .size(width = 120.dp, height = 60.dp)
-            .background(Color.Gray, RoundedCornerShape(8.dp))
+            .background(Color.LightGray, RoundedCornerShape(8.dp))
+            .clickable {
+                onDirectionDetected(Direction.CENTER)
+            }
             .pointerInput(Unit) {
                 detectDragGestures(
                     onDragEnd = {
-//                        onDirectionDetected(null)
-//                        currentDirection = null
+                        currentDirection = null
                     }
                 ) { change, dragAmount ->
                     val (dx, dy) = dragAmount
@@ -235,10 +331,10 @@ fun JapaneseCharacterButton(
                         dy > threshold -> Direction.DOWN
                         dx < -threshold -> Direction.LEFT
                         dx > threshold -> Direction.RIGHT
-                        else -> Direction.CENTER
+                        else -> null
                     }
 
-                    if (newDirection != currentDirection) {
+                    if (newDirection != null && newDirection != currentDirection) {
                         currentDirection = newDirection
                         onDirectionDetected(newDirection)
                         Log.d("DragDetect", "Dragged $newDirection")
@@ -289,12 +385,12 @@ fun JapaneseCharacterButton(
 }
 
 @Composable
-fun SmallText(text: String){
+fun JapaneseSmallText(text: String){
     Text(text=text, fontSize = 12.sp)
 }
 
 @Composable
-fun NormalText(text: String){
+fun JapaneseNormalText(text: String){
     Text(text=text, fontSize = 16.sp)
 }
 
@@ -302,11 +398,11 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["a"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> NormalText("あ")
-                Direction.UP -> SmallText("う")
-                Direction.DOWN -> SmallText("お")
-                Direction.RIGHT -> SmallText("え")
-                Direction.LEFT -> SmallText("い")
+                Direction.CENTER -> JapaneseNormalText("あ")
+                Direction.UP -> JapaneseSmallText("う")
+                Direction.DOWN -> JapaneseSmallText("お")
+                Direction.RIGHT -> JapaneseSmallText("え")
+                Direction.LEFT -> JapaneseSmallText("い")
                 else -> {}
             }
         },
@@ -325,11 +421,11 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["ta"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> NormalText("た")
-                Direction.UP -> SmallText("つ")
-                Direction.DOWN -> SmallText("と")
-                Direction.RIGHT -> SmallText("て")
-                Direction.LEFT -> SmallText("ち")
+                Direction.CENTER -> JapaneseNormalText("た")
+                Direction.UP -> JapaneseSmallText("つ")
+                Direction.DOWN -> JapaneseSmallText("と")
+                Direction.RIGHT -> JapaneseSmallText("て")
+                Direction.LEFT -> JapaneseSmallText("ち")
                 else -> {}
             }
         },
@@ -348,11 +444,11 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["ma"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> NormalText("ま")
-                Direction.UP -> SmallText("む")
-                Direction.DOWN -> SmallText("も")
-                Direction.RIGHT -> SmallText("め")
-                Direction.LEFT -> SmallText("み")
+                Direction.CENTER -> JapaneseNormalText("ま")
+                Direction.UP -> JapaneseSmallText("む")
+                Direction.DOWN -> JapaneseSmallText("も")
+                Direction.RIGHT -> JapaneseSmallText("め")
+                Direction.LEFT -> JapaneseSmallText("み")
                 else -> {}
             }
         },
@@ -371,11 +467,11 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["ka"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> NormalText("か")
-                Direction.UP -> SmallText("く")
-                Direction.DOWN -> SmallText("こ")
-                Direction.RIGHT -> SmallText("け")
-                Direction.LEFT -> SmallText("き")
+                Direction.CENTER -> JapaneseNormalText("か")
+                Direction.UP -> JapaneseSmallText("く")
+                Direction.DOWN -> JapaneseSmallText("こ")
+                Direction.RIGHT -> JapaneseSmallText("け")
+                Direction.LEFT -> JapaneseSmallText("き")
                 else -> {}
             }
         },
@@ -394,11 +490,11 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["na"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> NormalText("な")
-                Direction.UP -> SmallText("ぬ")
-                Direction.DOWN -> SmallText("の")
-                Direction.RIGHT -> SmallText("ね")
-                Direction.LEFT -> SmallText("に")
+                Direction.CENTER -> JapaneseNormalText("な")
+                Direction.UP -> JapaneseSmallText("ぬ")
+                Direction.DOWN -> JapaneseSmallText("の")
+                Direction.RIGHT -> JapaneseSmallText("ね")
+                Direction.LEFT -> JapaneseSmallText("に")
                 else -> {}
             }
         },
@@ -417,11 +513,11 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["ya"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> NormalText("や")
-                Direction.DOWN -> SmallText("よ")
-                Direction.UP -> SmallText("ゆ")
-                Direction.RIGHT -> SmallText("）")
-                Direction.LEFT -> SmallText("（")
+                Direction.CENTER -> JapaneseNormalText("や")
+                Direction.DOWN -> JapaneseSmallText("よ")
+                Direction.UP -> JapaneseSmallText("ゆ")
+                Direction.RIGHT -> JapaneseSmallText("）")
+                Direction.LEFT -> JapaneseSmallText("（")
                 else -> {}
             }
         },
@@ -440,11 +536,11 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["sa"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> NormalText("さ")
-                Direction.UP -> SmallText("す")
-                Direction.DOWN -> SmallText("そ")
-                Direction.RIGHT -> SmallText("せ")
-                Direction.LEFT -> SmallText("し")
+                Direction.CENTER -> JapaneseNormalText("さ")
+                Direction.UP -> JapaneseSmallText("す")
+                Direction.DOWN -> JapaneseSmallText("そ")
+                Direction.RIGHT -> JapaneseSmallText("せ")
+                Direction.LEFT -> JapaneseSmallText("し")
                 else -> {}
             }
         },
@@ -463,11 +559,11 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["ha"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> NormalText("は")
-                Direction.UP -> SmallText("ふ")
-                Direction.DOWN -> SmallText("ほ")
-                Direction.RIGHT -> SmallText("へ")
-                Direction.LEFT -> SmallText("ひ")
+                Direction.CENTER -> JapaneseNormalText("は")
+                Direction.UP -> JapaneseSmallText("ふ")
+                Direction.DOWN -> JapaneseSmallText("ほ")
+                Direction.RIGHT -> JapaneseSmallText("へ")
+                Direction.LEFT -> JapaneseSmallText("ひ")
                 else -> {}
             }
         },
@@ -486,11 +582,11 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["ra"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> Text("ら")
-                Direction.UP -> Text("る")
-                Direction.DOWN -> Text("ろ")
-                Direction.RIGHT -> Text("れ")
-                Direction.LEFT -> Text("り")
+                Direction.CENTER -> JapaneseNormalText("ら")
+                Direction.UP -> JapaneseSmallText("る")
+                Direction.DOWN -> JapaneseSmallText("ろ")
+                Direction.RIGHT -> JapaneseSmallText("れ")
+                Direction.LEFT -> JapaneseSmallText("り")
                 else -> {}
             }
         },
@@ -509,15 +605,21 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["wa"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> Text("わ")
-                Direction.DOWN -> Text("を")
+                Direction.CENTER -> JapaneseNormalText("わ")
+                Direction.UP -> JapaneseSmallText("を")
+                Direction.DOWN -> JapaneseSmallText("～")
+                Direction.RIGHT -> JapaneseSmallText("―")
+                Direction.LEFT -> JapaneseSmallText("ん")
                 else -> {}
             }
         },
         directionFunction = { direction, func ->
             when (direction) {
                 Direction.CENTER -> func("わ")
-                Direction.DOWN -> func("を")
+                Direction.UP -> func("を")
+                Direction.DOWN -> func("～")
+                Direction.RIGHT -> func("―")
+                Direction.LEFT -> func("ん")
                 else -> {}
             }
         }
@@ -526,7 +628,7 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["chiisai"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> Text("小")
+                Direction.CENTER -> JapaneseNormalText("小")
                 else -> {}
             }
         },
@@ -541,11 +643,11 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["coma"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> Text("、")
-                Direction.UP -> Text("？")
-                Direction.DOWN -> Text("…")
-                Direction.RIGHT -> Text("！")
-                Direction.LEFT -> Text("。")
+                Direction.CENTER -> JapaneseNormalText("、")
+                Direction.UP -> JapaneseSmallText("？")
+                Direction.DOWN -> JapaneseSmallText("…")
+                Direction.RIGHT -> JapaneseSmallText("！")
+                Direction.LEFT -> JapaneseSmallText("。")
                 else -> {}
             }
         },
