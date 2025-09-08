@@ -15,13 +15,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +29,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.sp
 import irk.staryo.androidmess.enums.Direction
 import irk.staryo.androidmess.model.JapaneseButtonContainer
 
@@ -81,6 +79,9 @@ fun CharacterInputBox(
 
 @Composable
 fun JapaneseKeyboard(addCharacter : (String) -> Unit, deleteCharacter: () -> Unit){
+    var chiisaiChar by rememberSaveable { mutableStateOf(false) }
+    var chiisaiCharChanger : (String) -> Unit = {text -> chiisaiChar = !chiisaiChar}
+
     Row(
         modifier = Modifier.fillMaxWidth()
     ){
@@ -126,7 +127,7 @@ fun JapaneseKeyboard(addCharacter : (String) -> Unit, deleteCharacter: () -> Uni
             JapaneseCharacterButton(
                 directionComposable = japaneseButtons["chiisai"]!!.directionalCompose,
                 onDirectionDetected = { direction ->
-                    japaneseButtons["chiisai"]!!.directionFunction(direction, addCharacter)
+                    japaneseButtons["chiisai"]!!.directionFunction(direction, chiisaiCharChanger)
                 }
             )
 
@@ -247,7 +248,9 @@ fun JapaneseCharacterButton(
     ) {
         // Center
         Box(
-            modifier = Modifier.size(40.dp),
+            modifier = Modifier
+                .size(40.dp)
+                .align(Alignment.Center),
             contentAlignment = Alignment.Center
         ) { directionComposable(Direction.CENTER) }
 
@@ -285,15 +288,25 @@ fun JapaneseCharacterButton(
     }
 }
 
+@Composable
+fun SmallText(text: String){
+    Text(text=text, fontSize = 12.sp)
+}
+
+@Composable
+fun NormalText(text: String){
+    Text(text=text, fontSize = 16.sp)
+}
+
 val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["a"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> Text("あ")
-                Direction.UP -> Text("う")
-                Direction.DOWN -> Text("お")
-                Direction.RIGHT -> Text("え")
-                Direction.LEFT -> Text("い")
+                Direction.CENTER -> NormalText("あ")
+                Direction.UP -> SmallText("う")
+                Direction.DOWN -> SmallText("お")
+                Direction.RIGHT -> SmallText("え")
+                Direction.LEFT -> SmallText("い")
                 else -> {}
             }
         },
@@ -312,11 +325,11 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["ta"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> Text("た")
-                Direction.UP -> Text("つ")
-                Direction.DOWN -> Text("と")
-                Direction.RIGHT -> Text("て")
-                Direction.LEFT -> Text("ち")
+                Direction.CENTER -> NormalText("た")
+                Direction.UP -> SmallText("つ")
+                Direction.DOWN -> SmallText("と")
+                Direction.RIGHT -> SmallText("て")
+                Direction.LEFT -> SmallText("ち")
                 else -> {}
             }
         },
@@ -335,11 +348,11 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["ma"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> Text("ま")
-                Direction.UP -> Text("む")
-                Direction.DOWN -> Text("も")
-                Direction.RIGHT -> Text("め")
-                Direction.LEFT -> Text("み")
+                Direction.CENTER -> NormalText("ま")
+                Direction.UP -> SmallText("む")
+                Direction.DOWN -> SmallText("も")
+                Direction.RIGHT -> SmallText("め")
+                Direction.LEFT -> SmallText("み")
                 else -> {}
             }
         },
@@ -358,11 +371,11 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["ka"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> Text("か")
-                Direction.UP -> Text("く")
-                Direction.DOWN -> Text("こ")
-                Direction.RIGHT -> Text("け")
-                Direction.LEFT -> Text("き")
+                Direction.CENTER -> NormalText("か")
+                Direction.UP -> SmallText("く")
+                Direction.DOWN -> SmallText("こ")
+                Direction.RIGHT -> SmallText("け")
+                Direction.LEFT -> SmallText("き")
                 else -> {}
             }
         },
@@ -381,11 +394,11 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["na"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> Text("な")
-                Direction.UP -> Text("ぬ")
-                Direction.DOWN -> Text("の")
-                Direction.RIGHT -> Text("ね")
-                Direction.LEFT -> Text("に")
+                Direction.CENTER -> NormalText("な")
+                Direction.UP -> SmallText("ぬ")
+                Direction.DOWN -> SmallText("の")
+                Direction.RIGHT -> SmallText("ね")
+                Direction.LEFT -> SmallText("に")
                 else -> {}
             }
         },
@@ -404,9 +417,11 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["ya"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> Text("や")
-                Direction.DOWN -> Text("よ")
-                Direction.LEFT -> Text("ゆ")
+                Direction.CENTER -> NormalText("や")
+                Direction.DOWN -> SmallText("よ")
+                Direction.UP -> SmallText("ゆ")
+                Direction.RIGHT -> SmallText("）")
+                Direction.LEFT -> SmallText("（")
                 else -> {}
             }
         },
@@ -414,7 +429,9 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
             when (direction) {
                 Direction.CENTER -> func("や")
                 Direction.DOWN -> func("よ")
-                Direction.LEFT -> func("ゆ")
+                Direction.UP -> func("ゆ")
+                Direction.RIGHT -> func("）")
+                Direction.LEFT -> func("（")
                 else -> {}
             }
         }
@@ -423,11 +440,11 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["sa"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> Text("さ")
-                Direction.UP -> Text("す")
-                Direction.DOWN -> Text("そ")
-                Direction.RIGHT -> Text("せ")
-                Direction.LEFT -> Text("し")
+                Direction.CENTER -> NormalText("さ")
+                Direction.UP -> SmallText("す")
+                Direction.DOWN -> SmallText("そ")
+                Direction.RIGHT -> SmallText("せ")
+                Direction.LEFT -> SmallText("し")
                 else -> {}
             }
         },
@@ -446,11 +463,11 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["ha"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> Text("は")
-                Direction.UP -> Text("ふ")
-                Direction.DOWN -> Text("ほ")
-                Direction.RIGHT -> Text("へ")
-                Direction.LEFT -> Text("ひ")
+                Direction.CENTER -> NormalText("は")
+                Direction.UP -> SmallText("ふ")
+                Direction.DOWN -> SmallText("ほ")
+                Direction.RIGHT -> SmallText("へ")
+                Direction.LEFT -> SmallText("ひ")
                 else -> {}
             }
         },
@@ -509,13 +526,13 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
     this["chiisai"] = JapaneseButtonContainer(
         directionalCompose = { direction ->
             when (direction) {
-                Direction.CENTER -> Text("っ")
+                Direction.CENTER -> Text("小")
                 else -> {}
             }
         },
         directionFunction = { direction, func ->
             when (direction) {
-                Direction.CENTER -> func("っ")
+                Direction.CENTER -> func("")
                 else -> {}
             }
         }
@@ -525,12 +542,20 @@ val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
         directionalCompose = { direction ->
             when (direction) {
                 Direction.CENTER -> Text("、")
+                Direction.UP -> Text("？")
+                Direction.DOWN -> Text("…")
+                Direction.RIGHT -> Text("！")
+                Direction.LEFT -> Text("。")
                 else -> {}
             }
         },
         directionFunction = { direction, func ->
             when (direction) {
                 Direction.CENTER -> func("、")
+                Direction.UP -> func("？")
+                Direction.DOWN -> func("…")
+                Direction.RIGHT -> func("！")
+                Direction.LEFT -> func("。")
                 else -> {}
             }
         }
