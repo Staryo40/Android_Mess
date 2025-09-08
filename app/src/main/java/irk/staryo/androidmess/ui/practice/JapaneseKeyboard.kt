@@ -13,9 +13,11 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -48,6 +50,7 @@ fun JapaneseInputLayout(){
             .padding(12.dp))
     {
         CharacterInputBox(currentCharacters, containerModifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(16.dp))
         JapaneseKeyboard(addCharacter, deleteCharacter)
     }
 }
@@ -84,55 +87,122 @@ fun JapaneseKeyboard(addCharacter : (String) -> Unit, deleteCharacter: () -> Uni
         Column(modifier = Modifier.weight(1f).padding(horizontal = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Box(modifier = Modifier
                 .background(Color.Gray, RoundedCornerShape(8.dp))
-                .size(width = 60.dp, height = 30.dp)
+                .size(width = 120.dp, height = 60.dp)
             )
             Box(modifier = Modifier
                 .background(Color.Gray, RoundedCornerShape(8.dp))
-                .size(width = 60.dp, height = 30.dp)
+                .size(width = 120.dp, height = 60.dp)
             )
             Box(modifier = Modifier
                 .background(Color.Gray, RoundedCornerShape(8.dp))
-                .size(width = 60.dp, height = 30.dp)
+                .size(width = 120.dp, height = 60.dp)
             )
             Box(modifier = Modifier
                 .background(Color.Gray, RoundedCornerShape(8.dp))
-                .size(width = 60.dp, height = 30.dp)
+                .size(width = 120.dp, height = 60.dp)
             )
         }
         Column (
-            modifier = Modifier.weight(3f).border(2.dp, Color.Black).background(Color.White, RoundedCornerShape(8.dp))
+            modifier = Modifier.weight(1f).padding(horizontal = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)
         ){
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(5), // 5 items per row (adjust as needed)
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(japaneseButtons.size) { index ->
-                    val button = japaneseButtons[index]
-                    JapaneseCharacterButton(
-                        directionComposable = button.directionalCompose,
-                        onDirectionDetected = { direction ->
-                            button.directionFunction(direction, addCharacter)
-                        }
-                    )
+            JapaneseCharacterButton(
+                directionComposable = japaneseButtons["a"]!!.directionalCompose,
+                onDirectionDetected = { direction ->
+                    japaneseButtons["a"]!!.directionFunction(direction, addCharacter)
                 }
-            }
+            )
+            JapaneseCharacterButton(
+                directionComposable = japaneseButtons["ta"]!!.directionalCompose,
+                onDirectionDetected = { direction ->
+                    japaneseButtons["ta"]!!.directionFunction(direction, addCharacter)
+                }
+            )
+            JapaneseCharacterButton(
+                directionComposable = japaneseButtons["ma"]!!.directionalCompose,
+                onDirectionDetected = { direction ->
+                    japaneseButtons["ma"]!!.directionFunction(direction, addCharacter)
+                }
+            )
+            JapaneseCharacterButton(
+                directionComposable = japaneseButtons["chiisai"]!!.directionalCompose,
+                onDirectionDetected = { direction ->
+                    japaneseButtons["chiisai"]!!.directionFunction(direction, addCharacter)
+                }
+            )
+
+        }
+        Column(
+            modifier = Modifier.weight(1f).padding(horizontal = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)
+        ){
+            JapaneseCharacterButton(
+                directionComposable = japaneseButtons["ka"]!!.directionalCompose,
+                onDirectionDetected = { direction ->
+                    japaneseButtons["ka"]!!.directionFunction(direction, addCharacter)
+                }
+            )
+            JapaneseCharacterButton(
+                directionComposable = japaneseButtons["na"]!!.directionalCompose,
+                onDirectionDetected = { direction ->
+                    japaneseButtons["na"]!!.directionFunction(direction, addCharacter)
+                }
+            )
+            JapaneseCharacterButton(
+                directionComposable = japaneseButtons["ya"]!!.directionalCompose,
+                onDirectionDetected = { direction ->
+                    japaneseButtons["ya"]!!.directionFunction(direction, addCharacter)
+                }
+            )
+            JapaneseCharacterButton(
+                directionComposable = japaneseButtons["wa"]!!.directionalCompose,
+                onDirectionDetected = { direction ->
+                    japaneseButtons["wa"]!!.directionFunction(direction, addCharacter)
+                }
+            )
+        }
+        Column(
+            modifier = Modifier.weight(1f).padding(horizontal = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            JapaneseCharacterButton(
+                directionComposable = japaneseButtons["sa"]!!.directionalCompose,
+                onDirectionDetected = { direction ->
+                    japaneseButtons["sa"]!!.directionFunction(direction, addCharacter)
+                }
+            )
+            JapaneseCharacterButton(
+                directionComposable = japaneseButtons["ha"]!!.directionalCompose,
+                onDirectionDetected = { direction ->
+                    japaneseButtons["ha"]!!.directionFunction(direction, addCharacter)
+                }
+            )
+            JapaneseCharacterButton(
+                directionComposable = japaneseButtons["ra"]!!.directionalCompose,
+                onDirectionDetected = { direction ->
+                    japaneseButtons["ra"]!!.directionFunction(direction, addCharacter)
+                }
+            )
+            JapaneseCharacterButton(
+                directionComposable = japaneseButtons["coma"]!!.directionalCompose,
+                onDirectionDetected = { direction ->
+                    japaneseButtons["coma"]!!.directionFunction(direction, addCharacter)
+                }
+            )
         }
         Column(modifier = Modifier.weight(1f).padding(horizontal = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Box(modifier = Modifier
                 .background(Color.Gray, RoundedCornerShape(8.dp))
-                .size(width = 60.dp, height = 30.dp)
+                .size(width = 120.dp, height = 60.dp)
             )
             Box(modifier = Modifier
                 .background(Color.Gray, RoundedCornerShape(8.dp))
-                .size(width = 60.dp, height = 30.dp)
+                .size(width = 120.dp, height = 60.dp)
             )
             Box(modifier = Modifier
                 .background(Color.Gray, RoundedCornerShape(8.dp))
-                .size(width = 60.dp, height = 30.dp)
+                .size(width = 120.dp, height = 60.dp)
             )
             Box(modifier = Modifier
                 .background(Color.Gray, RoundedCornerShape(8.dp))
-                .size(width = 60.dp, height = 30.dp)
+                .size(width = 120.dp, height = 60.dp)
             )
         }
     }
@@ -147,7 +217,7 @@ fun JapaneseCharacterButton(
 
     Box(
         modifier = Modifier
-            .size(120.dp)
+            .size(width = 120.dp, height = 60.dp)
             .background(Color.Gray, RoundedCornerShape(8.dp))
             .pointerInput(Unit) {
                 detectDragGestures(
@@ -215,10 +285,10 @@ fun JapaneseCharacterButton(
     }
 }
 
-val japaneseButtons = listOf(
-    JapaneseButtonContainer(
-        directionalCompose = {direction ->
-            when(direction){
+val japaneseButtons = mutableMapOf<String, JapaneseButtonContainer>().apply {
+    this["a"] = JapaneseButtonContainer(
+        directionalCompose = { direction ->
+            when (direction) {
                 Direction.CENTER -> Text("あ")
                 Direction.UP -> Text("う")
                 Direction.DOWN -> Text("お")
@@ -227,8 +297,8 @@ val japaneseButtons = listOf(
                 else -> {}
             }
         },
-        directionFunction = {direction, func ->
-            when(direction){
+        directionFunction = { direction, func ->
+            when (direction) {
                 Direction.CENTER -> func("あ")
                 Direction.UP -> func("う")
                 Direction.DOWN -> func("お")
@@ -238,4 +308,231 @@ val japaneseButtons = listOf(
             }
         }
     )
-)
+
+    this["ta"] = JapaneseButtonContainer(
+        directionalCompose = { direction ->
+            when (direction) {
+                Direction.CENTER -> Text("た")
+                Direction.UP -> Text("つ")
+                Direction.DOWN -> Text("と")
+                Direction.RIGHT -> Text("て")
+                Direction.LEFT -> Text("ち")
+                else -> {}
+            }
+        },
+        directionFunction = { direction, func ->
+            when (direction) {
+                Direction.CENTER -> func("た")
+                Direction.UP -> func("つ")
+                Direction.DOWN -> func("と")
+                Direction.RIGHT -> func("て")
+                Direction.LEFT -> func("ち")
+                else -> {}
+            }
+        }
+    )
+
+    this["ma"] = JapaneseButtonContainer(
+        directionalCompose = { direction ->
+            when (direction) {
+                Direction.CENTER -> Text("ま")
+                Direction.UP -> Text("む")
+                Direction.DOWN -> Text("も")
+                Direction.RIGHT -> Text("め")
+                Direction.LEFT -> Text("み")
+                else -> {}
+            }
+        },
+        directionFunction = { direction, func ->
+            when (direction) {
+                Direction.CENTER -> func("ま")
+                Direction.UP -> func("む")
+                Direction.DOWN -> func("も")
+                Direction.RIGHT -> func("め")
+                Direction.LEFT -> func("み")
+                else -> {}
+            }
+        }
+    )
+
+    this["ka"] = JapaneseButtonContainer(
+        directionalCompose = { direction ->
+            when (direction) {
+                Direction.CENTER -> Text("か")
+                Direction.UP -> Text("く")
+                Direction.DOWN -> Text("こ")
+                Direction.RIGHT -> Text("け")
+                Direction.LEFT -> Text("き")
+                else -> {}
+            }
+        },
+        directionFunction = { direction, func ->
+            when (direction) {
+                Direction.CENTER -> func("か")
+                Direction.UP -> func("く")
+                Direction.DOWN -> func("こ")
+                Direction.RIGHT -> func("け")
+                Direction.LEFT -> func("き")
+                else -> {}
+            }
+        }
+    )
+
+    this["na"] = JapaneseButtonContainer(
+        directionalCompose = { direction ->
+            when (direction) {
+                Direction.CENTER -> Text("な")
+                Direction.UP -> Text("ぬ")
+                Direction.DOWN -> Text("の")
+                Direction.RIGHT -> Text("ね")
+                Direction.LEFT -> Text("に")
+                else -> {}
+            }
+        },
+        directionFunction = { direction, func ->
+            when (direction) {
+                Direction.CENTER -> func("な")
+                Direction.UP -> func("ぬ")
+                Direction.DOWN -> func("の")
+                Direction.RIGHT -> func("ね")
+                Direction.LEFT -> func("に")
+                else -> {}
+            }
+        }
+    )
+
+    this["ya"] = JapaneseButtonContainer(
+        directionalCompose = { direction ->
+            when (direction) {
+                Direction.CENTER -> Text("や")
+                Direction.DOWN -> Text("よ")
+                Direction.LEFT -> Text("ゆ")
+                else -> {}
+            }
+        },
+        directionFunction = { direction, func ->
+            when (direction) {
+                Direction.CENTER -> func("や")
+                Direction.DOWN -> func("よ")
+                Direction.LEFT -> func("ゆ")
+                else -> {}
+            }
+        }
+    )
+
+    this["sa"] = JapaneseButtonContainer(
+        directionalCompose = { direction ->
+            when (direction) {
+                Direction.CENTER -> Text("さ")
+                Direction.UP -> Text("す")
+                Direction.DOWN -> Text("そ")
+                Direction.RIGHT -> Text("せ")
+                Direction.LEFT -> Text("し")
+                else -> {}
+            }
+        },
+        directionFunction = { direction, func ->
+            when (direction) {
+                Direction.CENTER -> func("さ")
+                Direction.UP -> func("す")
+                Direction.DOWN -> func("そ")
+                Direction.RIGHT -> func("せ")
+                Direction.LEFT -> func("し")
+                else -> {}
+            }
+        }
+    )
+
+    this["ha"] = JapaneseButtonContainer(
+        directionalCompose = { direction ->
+            when (direction) {
+                Direction.CENTER -> Text("は")
+                Direction.UP -> Text("ふ")
+                Direction.DOWN -> Text("ほ")
+                Direction.RIGHT -> Text("へ")
+                Direction.LEFT -> Text("ひ")
+                else -> {}
+            }
+        },
+        directionFunction = { direction, func ->
+            when (direction) {
+                Direction.CENTER -> func("は")
+                Direction.UP -> func("ふ")
+                Direction.DOWN -> func("ほ")
+                Direction.RIGHT -> func("へ")
+                Direction.LEFT -> func("ひ")
+                else -> {}
+            }
+        }
+    )
+
+    this["ra"] = JapaneseButtonContainer(
+        directionalCompose = { direction ->
+            when (direction) {
+                Direction.CENTER -> Text("ら")
+                Direction.UP -> Text("る")
+                Direction.DOWN -> Text("ろ")
+                Direction.RIGHT -> Text("れ")
+                Direction.LEFT -> Text("り")
+                else -> {}
+            }
+        },
+        directionFunction = { direction, func ->
+            when (direction) {
+                Direction.CENTER -> func("ら")
+                Direction.UP -> func("る")
+                Direction.DOWN -> func("ろ")
+                Direction.RIGHT -> func("れ")
+                Direction.LEFT -> func("り")
+                else -> {}
+            }
+        }
+    )
+
+    this["wa"] = JapaneseButtonContainer(
+        directionalCompose = { direction ->
+            when (direction) {
+                Direction.CENTER -> Text("わ")
+                Direction.DOWN -> Text("を")
+                else -> {}
+            }
+        },
+        directionFunction = { direction, func ->
+            when (direction) {
+                Direction.CENTER -> func("わ")
+                Direction.DOWN -> func("を")
+                else -> {}
+            }
+        }
+    )
+
+    this["chiisai"] = JapaneseButtonContainer(
+        directionalCompose = { direction ->
+            when (direction) {
+                Direction.CENTER -> Text("っ")
+                else -> {}
+            }
+        },
+        directionFunction = { direction, func ->
+            when (direction) {
+                Direction.CENTER -> func("っ")
+                else -> {}
+            }
+        }
+    )
+
+    this["coma"] = JapaneseButtonContainer(
+        directionalCompose = { direction ->
+            when (direction) {
+                Direction.CENTER -> Text("、")
+                else -> {}
+            }
+        },
+        directionFunction = { direction, func ->
+            when (direction) {
+                Direction.CENTER -> func("、")
+                else -> {}
+            }
+        }
+    )
+}

@@ -28,6 +28,7 @@ import irk.staryo.androidmess.ui.common.BottomBar
 import irk.staryo.androidmess.ui.common.MainContent
 import irk.staryo.androidmess.ui.common.TopBar
 import androidx.lifecycle.viewmodel.compose.viewModel
+import irk.staryo.androidmess.ui.practice.JapaneseInputLayout
 import irk.staryo.androidmess.ui.practice.TwoOptionList
 import irk.staryo.androidmess.ui.theme.AndroidMessTheme
 
@@ -65,7 +66,7 @@ class MainActivity : ComponentActivity() { // Compose version of activity
                                         .padding(12.dp)
                                         .fillMaxWidth()
                                 )
-                                2 -> Greeting("Option3")
+                                2 -> JapaneseInputLayout()
                             }
                         }
                         BottomBar(selected, bottomOptions)
